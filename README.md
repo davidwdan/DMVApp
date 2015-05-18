@@ -9,6 +9,8 @@ This is a very simple fake application that lets you get in line before you arri
 
 ##Installation
 
+[Download](https://github.com/davidwdan/DMVApp/archive/master.zip) and unzip this project.
+
 Install the PHP dependencies
 
 `composer install`
