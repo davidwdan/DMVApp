@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Inconvenience Coordinator Dashboard</title>
+
+    <script src="bower_components/autobahn/autobahn.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+</head>
+<body>
+
+<h1>Inconvenience Coordinator Dashboard</h1>
+
+<p>This page simulates the Ardunio/LCD screen, which was used during the talk.</p>
+
+<button id="next">Next</button>
+<button id="clear">Clear</button>
+
+<h1 id="number"></h1>
+
+<h1 id="serving"></h1>
+
+<script>
+
+    var connection = new autobahn.Connection({
+        url: "ws://127.0.0.1:8989",
+        realm: "realm1"
+    });
+
+    connection.onopen = function (session) {
+
+        var yourNumber;
+
+        session.subscribe('line_change', function (args) {
+
+            $("#serving").html('Now serving ' + args[0]);
+        });
+
+        var next = $("#next");
+        next.off('click');
+        next.on('click', function () {
+            return session.call('next');
+
+        });
+
+        var clear = $("#clear");
+        clear.off('click');
+        clear.on('click', function () {
+            return session.call('clear');
+
+        });
+
+    };
+
+    connection.open();
+
+</script>
+
+
+</body>
+</html>

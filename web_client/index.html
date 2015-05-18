@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Line-inator</title>
+
+    <script src="bower_components/autobahn/autobahn.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+</head>
+<body>
+
+<h1>The Line-inator 5000</h1>
+
+<button id="in-line">Get In Line</button>
+
+<h1 id="number"></h1>
+
+<h1 id="serving"></h1>
+
+<script>
+
+    var connection = new autobahn.Connection({
+        url: "ws://127.0.0.1:8989",
+        realm: "realm1"
+    });
+
+    connection.onopen = function (session) {
+
+        var yourNumber;
+
+        session.subscribe('line_change', function (args) {
+
+            var message;
+
+            if (yourNumber === args[0]) {
+                message = 'Now serving your number!!!';
+            } else {
+                message = 'Now serving ' + args[0];
+            }
+
+            $("#serving").html(message);
+
+        });
+
+        var inline = $("#in-line");
+        inline.off('click');
+        inline.on('click', function () {
+            return session.call('get_in_line').then(function (res) {
+                yourNumber = res;
+                $("#number").html('Your number is ' + res);
+            });
+
+        });
+
+    };
+
+    connection.open();
+
+</script>
+
+
+</body>
+</html>

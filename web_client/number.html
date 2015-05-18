@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <style>
+        h1 {
+            font-size: 100px;
+        }
+    </style>
+
+    <script src="bower_components/autobahn/autobahn.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+</head>
+<body>
+
+<h2>Now Serving</h2>
+
+<h1 id="serving"></h1>
+
+<script>
+
+    var connection = new autobahn.Connection({
+        url: "ws://127.0.0.1:8989",
+        realm: "realm1"
+    });
+
+    connection.onopen = function (session) {
+
+        session.subscribe('line_change', function (args) {
+            $("#serving").html(args[0]);
+        });
+
+    };
+
+    connection.open();
+
+</script>
+
+
+</body>
+</html>
